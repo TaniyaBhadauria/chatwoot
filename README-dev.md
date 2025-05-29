@@ -202,8 +202,6 @@ Verify it's running:
 ```
 
 > 💡 **Tip:** Ensure Redis is running in the background before starting Chatwoot. Use `sudo service redis-server status` to check.
-Here's how you can summarize and include that in your `README.md` as a tip under the Redis section:
-
 ---
 
 > ⚠️ **Troubleshooting Tip: Redis service is masked**
@@ -319,8 +317,6 @@ development:
 Access the Chatwoot UI
    Open your browser and navigate to: **http://127.0.0.1:3000/app/login**
 ---
-Sure! Here’s how you can document the signup route configuration in your README file:
-
 ---
 ### ⚠️ Troubleshooting Tips
 #### 🔐 Enabling Signup Route
