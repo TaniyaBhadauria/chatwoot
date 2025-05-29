@@ -56,6 +56,8 @@ export default {
     return {
       isCannedResponseModalOpen: false,
       showDeleteModal: false,
+      // Added flag to toggle the visibility of message contentAttributes section in the context menu
+      showContentAttributes: false,
     };
   },
   computed: {
@@ -250,6 +252,39 @@ export default {
           variant="icon"
           @click.stop="openDeleteModal"
         />
+        <!-- Display contentAttributes section if message contains any attributes -->
+        <!-- Enables toggleable UI for viewing message-level metadata such as intent and summary -->
+        <div
+          v-if="Object.keys(contentAttributes).length"
+          class="p-2 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300"
+        >
+          <div
+            class="font-semibold flex items-center justify-between cursor-pointer"
+            @click="showContentAttributes = !showContentAttributes"
+          >
+            <span>Content Attributes</span>
+            <svg
+              :class="['transition-transform', showContentAttributes ? 'rotate-90' : '']"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-3 w-3 ml-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+
+          <transition name="fade-slide">
+            <!-- list-none removes the bullet points -->
+            <ul v-if="showContentAttributes"  class="list-none mt-2 p-0">
+              <li v-for="(value, key) in contentAttributes" :key="key">
+                <strong>{{ key }}:</strong> {{ value }}
+              </li>
+            </ul>
+          </transition>
+        </div>
+
       </div>
     </ContextMenu>
   </div>
@@ -282,5 +317,19 @@ export default {
       @apply pt-4 pb-8 px-8;
     }
   }
+}
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  max-height: 200px;
+  opacity: 1;
 }
 </style>

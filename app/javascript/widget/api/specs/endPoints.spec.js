@@ -23,7 +23,12 @@ describe('#sendMessage', () => {
       params: {
         message: {
           content: 'hello',
+          // Added expectation for `intent` field derived from sentiment analysis of the message content
+          intent: 'neutral',
           referer_url: '',
+          reply_to: undefined,
+          // Added `summary` field to validate presence of keyword-based short summary from message content
+          summary: '',
           timestamp: 'mock date',
         },
       },

@@ -1,5 +1,7 @@
 import { buildSearchParamsWithLocale } from '../helpers/urlParamsHelper';
 import { generateEventParams } from './events';
+import { getIntent, getShortSummary } from '../../dashboard/store/modules/conversations/actions';
+
 
 const createConversation = params => {
   const referrerURL = window.referrerURL || '';
@@ -33,6 +35,10 @@ const sendMessage = (content, replyTo) => {
         reply_to: replyTo,
         timestamp: new Date().toString(),
         referer_url: referrerURL,
+        // Add intent field by analyzing message sentiment (e.g., positive/negative/neutral)
+        intent: getIntent(content),
+        // Add summary field by extracting top keywords from the message content
+        summary:  getShortSummary(content),
       },
     },
   };

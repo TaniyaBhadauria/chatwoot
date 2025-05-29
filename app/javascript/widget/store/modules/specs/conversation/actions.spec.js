@@ -45,6 +45,27 @@ describe('#actions', () => {
       ]);
       windowSpy.mockRestore();
     });
+    it('adds or updates message with enhanced content attributes', () => {
+      const message = {
+        id: 999,
+        content: 'Enhanced attributes test',
+        content_attributes: {
+          intent: 'positive',
+          summary: 'Product Inquiry',
+        },
+      };
+
+      actions.addOrUpdateMessage({ commit }, message);
+
+      expect(commit).toBeCalledWith('pushMessageToConversation', {
+        id: 999,
+        content: 'Enhanced attributes test',
+        content_attributes: {
+          intent: 'positive',
+          summary: 'Product Inquiry',
+        },
+      });
+    });
   });
 
   describe('#addOrUpdateMessage', () => {

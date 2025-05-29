@@ -31,6 +31,10 @@ const props = defineProps({
     type: Object,
     default: () => ({ incoming: false, outgoing: false }),
   },
+  contentAttributes: {
+    type: Object,
+    default: () => ({ intent: false, summary: false }),
+  },
   messages: {
     type: Array,
     default: () => [],
