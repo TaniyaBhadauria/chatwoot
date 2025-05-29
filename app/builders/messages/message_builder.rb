@@ -13,6 +13,8 @@ class Messages::MessageBuilder
     return unless params.instance_of?(ActionController::Parameters)
 
     @in_reply_to = content_attributes&.dig(:in_reply_to)
+    @summary = content_attributes&.dig(:summary)
+    @intent = content_attributes&.dig(:intent)
     @items = content_attributes&.dig(:items)
   end
 
@@ -149,8 +151,11 @@ class Messages::MessageBuilder
       content_type: @params[:content_type],
       items: @items,
       in_reply_to: @in_reply_to,
+      summary: @summary,
+      intent: @intent,
       echo_id: @params[:echo_id],
-      source_id: @params[:source_id]
+      source_id: @params[:source_id],
+      content_attributes: content_attributes.presence || {}
     }.merge(external_created_at).merge(automation_rule_id).merge(campaign_id).merge(template_params)
   end
 end

@@ -1,6 +1,7 @@
 import types from '../../mutation-types';
 import ConversationApi from '../../../api/inbox/conversation';
 import MessageApi from '../../../api/inbox/message';
+import Sentiment from "sentiment";
 import { MESSAGE_STATUS, MESSAGE_TYPE } from 'shared/constants/messages';
 import { createPendingMessage } from 'dashboard/helper/commons';
 import {
@@ -12,6 +13,64 @@ import {
 import messageReadActions from './actions/messageReadActions';
 import messageTranslateActions from './actions/messageTranslateActions';
 import * as Sentry from '@sentry/vue';
+
+const sentiment = new Sentiment();
+
+//sentiment-based intent detection and keyword-based summarization to each message's contentAttributes
+
+/**
+ * Analyze sentiment of the message and classify intent.
+ * @param {string} text - The input message content.
+ * @returns {string} - 'positive', 'negative', or 'neutral'
+ */
+function getIntent(text) {
+  text = String(text || '');
+  const result = sentiment.analyze(text);
+  if (result.score > 0) return "positive";
+  if (result.score < 0) return "negative";
+  return "neutral";
+}
+
+/**
+ * Generate a short keyword-based summary of a message.
+ * @param {string} text - The input message.
+ * @param {number} maxWords - Max keywords to return.
+ * @returns {string} - A brief string summary.
+ */
+function getShortSummary(text, maxWords = 7) {
+  text = String(text || '').toLowerCase();
+
+  // Extended stopword list to eliminate less meaningful words
+  const stopwords = new Set([
+    "the", "is", "at", "which", "on", "a", "an", "and", "or", "of", "in", "to", "for", "with",
+    "by", "that", "this", "it", "as", "i", "you", "my", "me", "we", "our", "us", "he", "she",
+    "they", "them", "his", "her", "him", "are", "was", "were", "be", "been", "have", "has", "had",
+    "do", "does", "did", "so", "but", "if", "hello", "hi", "hey", "please", "can", "could", "would",
+    "should", "may", "might", "need", "keeps", "keep", "every", "few", "also", "just", "because"
+  ]);
+
+  // Extract words (only letters), filter short words (<3 chars) and stopwords
+  const words = (text.match(/\b[a-z]{3,}\b/g) || []).filter(word => !stopwords.has(word));
+
+  if (words.length === 0) return '';
+
+  // Count frequencies
+  const freq = {};
+  words.forEach(word => freq[word] = (freq[word] || 0) + 1);
+
+  // Sort words by frequency descending
+  const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+
+  // Pick top maxWords words
+  const summaryWords = sorted.slice(0, maxWords).map(entry => entry[0]);
+
+  // Capitalize first letter of first word for better readability
+  if (summaryWords.length > 0) {
+    summaryWords[0] = summaryWords[0][0].toUpperCase() + summaryWords[0].slice(1);
+  }
+
+  return summaryWords.join(' ');
+}
 
 export const hasMessageFailedWithExternalError = pendingMessage => {
   // This helper is used to check if the message has failed with an external error.
@@ -269,13 +328,22 @@ const actions = {
   sendMessageWithData: async ({ commit }, pendingMessage) => {
     const { conversation_id: conversationId, id } = pendingMessage;
     try {
-      commit(types.ADD_MESSAGE, {
+      // Enrich message with sentiment-based intent and keyword summary
+      const enrichedMessage = {
         ...pendingMessage,
+        contentAttributes: {
+          ...(pendingMessage.contentAttributes || {}),
+          intent: getIntent(pendingMessage.content),
+          summary:  getShortSummary(pendingMessage.content),
+        },
+      };
+      commit(types.ADD_MESSAGE, {
+        ...enrichedMessage,
         status: MESSAGE_STATUS.PROGRESS,
       });
       const response = hasMessageFailedWithExternalError(pendingMessage)
         ? await MessageApi.retry(conversationId, id)
-        : await MessageApi.create(pendingMessage);
+        : await MessageApi.create(enrichedMessage);
       commit(types.ADD_MESSAGE, {
         ...response.data,
         status: MESSAGE_STATUS.SENT,
@@ -503,3 +571,4 @@ const actions = {
 };
 
 export default actions;
+export { getIntent, getShortSummary };

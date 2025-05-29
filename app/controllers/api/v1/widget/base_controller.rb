@@ -80,7 +80,10 @@ class Api::V1::Widget::BaseController < ApplicationController
       content: permitted_params[:message][:content],
       inbox_id: conversation.inbox_id,
       content_attributes: {
-        in_reply_to: permitted_params[:message][:reply_to]
+        in_reply_to: permitted_params[:message][:reply_to],
+         # New Enhancements Below
+        summary: permitted_params[:message][:summary], # Store short summary of message (for UI context display)
+        intent: permitted_params[:message][:intent],    # Store sentiment-based intent like 'positive', 'negative', etc.
       },
       echo_id: permitted_params[:message][:echo_id],
       message_type: :incoming
