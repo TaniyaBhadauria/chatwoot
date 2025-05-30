@@ -1,15 +1,15 @@
 class AIAgent::ToolRegistryService
   attr_reader :registered_tools, :tools
 
-  def initialize(assistant, user: nil)
-    @assistant = assistant
+  def initialize(topic, user: nil)
+    @topic = topic
     @user = user
     @registered_tools = []
     @tools = {}
   end
 
   def register_tool(tool_class)
-    tool = tool_class.new(@assistant, user: @user)
+    tool = tool_class.new(@topic, user: @user)
     return unless tool.active?
 
     @tools[tool.name] = tool

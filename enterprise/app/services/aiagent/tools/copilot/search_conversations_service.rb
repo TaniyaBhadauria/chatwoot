@@ -51,9 +51,9 @@ class AIAgent::Tools::Copilot::SearchConversationsService < AIAgent::Tools::Base
 
   def permissible_conversations
     Conversations::PermissionFilterService.new(
-      @assistant.account.conversations,
+      @topic.account.conversations,
       @user,
-      @assistant.account
+      @topic.account
     ).perform
   end
 

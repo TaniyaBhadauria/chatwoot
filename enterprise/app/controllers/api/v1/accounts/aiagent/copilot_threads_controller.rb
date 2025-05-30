@@ -4,7 +4,7 @@ class Api::V1::Accounts::AIAgent::CopilotThreadsController < Api::V1::Accounts::
   def index
     @copilot_threads = Current.account.copilot_threads
                               .where(user_id: Current.user.id)
-                              .includes(:user, :assistant)
+                              .includes(:user, :topic)
                               .order(created_at: :desc)
                               .page(permitted_params[:page] || 1)
                               .per(5)
@@ -15,7 +15,7 @@ class Api::V1::Accounts::AIAgent::CopilotThreadsController < Api::V1::Accounts::
       @copilot_thread = Current.account.copilot_threads.create!(
         title: copilot_thread_params[:message],
         user: Current.user,
-        assistant: assistant
+        topic: topic
       )
 
       @copilot_thread.copilot_messages.create!(message_type: :user, message: copilot_thread_params[:message])
@@ -28,12 +28,12 @@ class Api::V1::Accounts::AIAgent::CopilotThreadsController < Api::V1::Accounts::
     return render_could_not_create_error('Message is required') if copilot_thread_params[:message].blank?
   end
 
-  def assistant
-    Current.account.aiagent_assistants.find(copilot_thread_params[:assistant_id])
+  def topic
+    Current.account.aiagent_topics.find(copilot_thread_params[:topic_id])
   end
 
   def copilot_thread_params
-    params.permit(:message, :assistant_id)
+    params.permit(:message, :topic_id)
   end
 
   def permitted_params

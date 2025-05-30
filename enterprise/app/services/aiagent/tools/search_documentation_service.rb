@@ -24,7 +24,7 @@ class AIAgent::Tools::SearchDocumentationService < AIAgent::Tools::BaseService
     query = arguments['search_query']
     Rails.logger.info { "#{self.class.name}: #{query}" }
 
-    responses = assistant.responses.approved.search(query)
+    responses = topic.responses.approved.search(query)
 
     return 'No FAQs found for the given query' if responses.empty?
 
