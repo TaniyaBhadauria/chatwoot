@@ -40,19 +40,25 @@ export default {
       >
         <div class="px-8 max-w-[560px] w-full overflow-auto">
           <div class="mb-4">
+            <!--
+  Custom Branding Update:
+  - Replaced dynamic logo binding with static '/brand-assets/custom_logo.png'
+  - Increased logo height to h-16 for better visibility
+  -->
             <img
-              :src="globalConfig.logo"
+              :src="'/brand-assets/custom_logo.png'"
               :alt="globalConfig.installationName"
-              class="block w-auto h-8 dark:hidden"
+              class="block w-auto h-16 dark:hidden"
             />
             <img
               v-if="globalConfig.logoDark"
-              :src="globalConfig.logoDark"
+              :src="'/brand-assets/custom_logo.png'"
               :alt="globalConfig.installationName"
-              class="hidden w-auto h-8 dark:block"
+              class="hidden w-auto h-16 dark:block"
             />
             <h2
-              class="mt-6 text-3xl font-medium text-left mb-7 text-n-slate-12"
+              class="mt-6 text-3xl font-medium text-left mb-7"
+              style="color: #f97316"
             >
               {{ $t('REGISTER.TRY_WOOT') }}
             </h2>
@@ -60,7 +66,7 @@ export default {
           <SignupForm />
           <div class="px-1 text-sm text-n-slate-12">
             <span>{{ $t('REGISTER.HAVE_AN_ACCOUNT') }}</span>
-            <router-link class="text-link text-n-brand" to="/app/login">
+            <router-link class="text-link text-n-brand" style="color: #f97316" to="/app/login" >
               {{
                 useInstallationName(
                   $t('LOGIN.TITLE'),

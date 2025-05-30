@@ -54,6 +54,7 @@ export default {
         </div>
         <p
           class="mb-0 overflow-hidden text-sm search--label whitespace-nowrap text-ellipsis text-n-slate-11"
+          style="color: #f97316"
         >
           {{ $t('CONVERSATION.SEARCH_MESSAGES') }}
         </p>
