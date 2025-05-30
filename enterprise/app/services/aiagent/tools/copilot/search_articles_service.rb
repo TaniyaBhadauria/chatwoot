@@ -44,7 +44,7 @@ class AIAgent::Tools::Copilot::SearchArticlesService < AIAgent::Tools::BaseServi
   private
 
   def fetch_articles(query, category_id, status)
-    articles = Article.where(account_id: @assistant.account_id)
+    articles = Article.where(account_id: @topic.account_id)
     articles = articles.where('title ILIKE :query OR content ILIKE :query', query: "%#{query}%") if query.present?
     articles = articles.where(category_id: category_id) if category_id.present?
     articles = articles.where(status: status) if status.present?

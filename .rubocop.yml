@@ -117,7 +117,7 @@ Rails/RedundantPresenceValidationOnBelongsTo:
 
 Rails/InverseOf:
   Exclude:
-    - enterprise/app/models/aiagent/assistant.rb
+    - enterprise/app/models/aiagent/topic.rb
 
 Rails/UniqueValidationWithoutIndex:
   Exclude:

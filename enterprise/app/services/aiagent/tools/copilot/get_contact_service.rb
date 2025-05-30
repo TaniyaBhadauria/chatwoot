@@ -27,7 +27,7 @@ class AIAgent::Tools::Copilot::GetContactService < AIAgent::Tools::BaseService
 
     return 'Missing required parameters' if contact_id.blank?
 
-    contact = Contact.find_by(id: contact_id, account_id: @assistant.account_id)
+    contact = Contact.find_by(id: contact_id, account_id: @topic.account_id)
     return 'Contact not found' if contact.nil?
 
     contact.to_llm_text
