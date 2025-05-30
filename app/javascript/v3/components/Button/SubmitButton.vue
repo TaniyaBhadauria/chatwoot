@@ -56,6 +56,7 @@ export default {
     data-testid="submit_button"
     :disabled="disabled"
     :class="computedClass"
+    style="background-color: #f97316"
     class="flex items-center w-full justify-center rounded-md bg-woot-500 py-3 px-3 text-base font-medium text-white shadow-sm hover:bg-woot-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-woot-500 cursor-pointer"
   >
     <span>{{ buttonText }}</span>

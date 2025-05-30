@@ -7,8 +7,10 @@ import {
 } from '../widget/constants/sdkEvents';
 import { dispatchWindowEvent } from 'shared/helpers/CustomEventHelper';
 
+// === Custom Branding Update ===
+// Replaced default bubbleSVG path with a custom SVG path to match new brand icon.
 export const bubbleSVG =
-  'M240.808 240.808H122.123C56.6994 240.808 3.45695 187.562 3.45695 122.122C3.45695 56.7031 56.6994 3.45697 122.124 3.45697C187.566 3.45697 240.808 56.7031 240.808 122.122V240.808Z';
+  'M33 3C17.0883 3 3.99997 16.0883 3.99997 32V44C3.99997 46.2091 5.79086 48 8 48H13C14.6569 48 16 46.6569 16 45V33C16 31.3431 14.6569 30 13 30H8.33333V32C8.33333 18.86 19.86 7.33333 33 7.33333C46.14 7.33333 57.6667 18.86 57.6667 32V30H53C51.3431 30 50 31.3431 50 33V45C50 46.6569 51.3431 48 53 48H58C60.2091 48 62 46.2091 62 44V32C62 16.0883 48.9117 3 33 3Z';
 
 export const body = document.getElementsByTagName('body')[0];
 export const widgetHolder = document.createElement('div');
@@ -32,9 +34,10 @@ export const createBubbleIcon = ({ className, path, target }) => {
     'svg'
   );
   bubbleIcon.setAttributeNS(null, 'id', 'woot-widget-bubble-icon');
-  bubbleIcon.setAttributeNS(null, 'width', '24');
-  bubbleIcon.setAttributeNS(null, 'height', '24');
-  bubbleIcon.setAttributeNS(null, 'viewBox', '0 0 240 240');
+  // Updated dimensions for the bubble icon to 96x96 and adjusted viewBox to '0 0 66 66'
+  bubbleIcon.setAttributeNS(null, 'width', '96');
+  bubbleIcon.setAttributeNS(null, 'height', '96');
+  bubbleIcon.setAttributeNS(null, 'viewBox', '0 0 66 66');
   bubbleIcon.setAttributeNS(null, 'fill', 'none');
   bubbleIcon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 

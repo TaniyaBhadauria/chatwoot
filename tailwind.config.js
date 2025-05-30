@@ -1,6 +1,7 @@
 const { slateDark } = require('@radix-ui/colors');
 import { colors } from './theme/colors';
 import { icons } from './theme/icons';
+const defaultColors = require('tailwindcss/colors');
 const defaultTheme = require('tailwindcss/defaultTheme');
 const {
   iconsPlugin,
@@ -191,14 +192,34 @@ const tailwindConfig = {
       ...defaultTheme.fontSize,
       xxs: '0.625rem',
     },
+    // === Custom Branding Update ===
+    // Replaced default blue palette with Tailwind's orange scale for branding
+    // Added custom 'woot' color namespace using shades of orange (50–900)
+    // Maintained default colors and custom theme integration
+    // ==================================
     colors: {
+      ...defaultColors, // ✅ Restores default colors including orange-500
+      blue: defaultColors.orange,
       transparent: 'transparent',
       white: '#fff',
       'modal-backdrop-light': 'rgba(0, 0, 0, 0.4)',
       'modal-backdrop-dark': 'rgba(0, 0, 0, 0.6)',
       current: 'currentColor',
-      ...colors,
+      ...colors, // your custom colors (imported from ./theme/colors)
       body: slateDark.slate7,
+      woot: {
+        50: '#fff7ed',  // orange-50
+        75: '#ffe5cc',
+        100: '#ffedd5', // orange-100
+        200: '#fed7aa', // orange-200
+        300: '#fdba74', // orange-300
+        400: '#fb923c', // orange-400 (lighter)
+        500: '#f97316', // orange-500 (main orange)
+        600: '#ea580c', // orange-600 (darker)
+        700: '#c2410c', // orange-700
+        800: '#9a3412', // orange-800
+        900: '#7c2d12', // orange-900
+      },
     },
     keyframes: {
       ...defaultTheme.keyframes,
